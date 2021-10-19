@@ -116,15 +116,8 @@ getTop5Lists = async (req, res) => {
 }
 getTop5ListPairs = async (req, res) => {
     await Top5List.find({}, (err, top5Lists) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err})
-        }
-        if (!top5Lists.length) {
-            return res
-                .status(404)
-                .json({ success: false, error: 'Top 5 Lists not found'})
-        }
-        else {
+        
+         {
             // PUT ALL THE LISTS INTO ID, NAME PAIRS
             let pairs = [];
             for (let key in top5Lists) {
@@ -137,7 +130,7 @@ getTop5ListPairs = async (req, res) => {
             }
             return res.status(200).json({ success: true, idNamePairs: pairs })
         }
-    }).catch(err => console.log(err))
+    })
 }
 
 module.exports = {
