@@ -18,11 +18,14 @@ export const GlobalStoreActionType = {
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
     SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
-    //CREATE_NEW_LIST: "CREATE_NEW_LIST"
+    CREATE_NEW_LIST: "CREATE_NEW_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
 const tps = new jsTPS();
+
+//this will be our counter for when we add items
+let counter = 0;
 
 // WITH THIS WE'RE MAKING OUR GLOBAL DATA STORE
 // AVAILABLE TO THE REST OF THE APPLICATION
@@ -98,16 +101,16 @@ export const useGlobalStore = () => {
                 });
             }
             //CREATE A NEW LIST 
-            //case GlobalStoreActionType.CREATE_NEW_LIST: {
-            //    return setStore({
-            //        idNamePairs: store.idNamePairs,
-            //        currentList: payload,
-            //        newListCounter: store.newListCounter,
-            //        isListNameEditActive: false,
-            //        isItemEditActive: false,
-            //        listMarkedForDeletion: null
-            //    });
-            //}
+            case GlobalStoreActionType.CREATE_NEW_LIST: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    currentList: payload,
+                    newListCounter: store.newListCounter+1,
+                    isListNameEditActive: false,
+                    isItemEditActive: false,
+                    listMarkedForDeletion: null
+                });
+            }
             default:
                 return store;
         }
@@ -201,13 +204,14 @@ export const useGlobalStore = () => {
     store.createNewList = function (id) {
         async function asyncCreateNewList() {
             let response = await api.createTop5List(
-                {name: "Untitled", items: ['?','?','?','?','?']}
+                {name: "Untitled" + counter, items: ['?','?','?','?','?']}
             );
             if (response.data.success){
+                counter++;
                 let top5List = response.data.top5List;
                 console.log(top5List);
                 storeReducer({
-                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    type: GlobalStoreActionType.CREATE_NEW_LIST,
                     payload: top5List
                 });
                 store.history.push("/top5list/" + top5List._id);
