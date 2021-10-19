@@ -37,6 +37,7 @@ function ListCard(props) {
             store.setIsListNameEditActive();
         }
         setEditActive(newActive);
+        store.loadIdNamePairs();
     }
 
     function handleKeyPress(event) {
@@ -48,7 +49,7 @@ function ListCard(props) {
     }
 
     function handleUpdateText(event) {
-        setText(event.target.value );
+        setText(event.target.value);
     }
 
     function handleListDelete(event){

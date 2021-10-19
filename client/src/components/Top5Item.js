@@ -13,45 +13,60 @@ function Top5Item(props) {
     const [ editActive, setEditActive ] = useState(false);
 
     function handleDragStart(event) {
-        event.dataTransfer.setData("item", event.target.id);
+        if(!store.isItemEditActive){
+            event.dataTransfer.setData("item", event.target.id);
+        }
     }
 
     function handleDragOver(event) {
-        event.preventDefault();
+        if(!store.isItemEditActive){
+            event.preventDefault();
+        }
     }
 
     function handleDragEnter(event) {
-        event.preventDefault();
-        setDraggedTo(true);
+        if(!store.isItemEditActive){
+            event.preventDefault();
+            setDraggedTo(true);
+        }
     }
 
     function handleDragLeave(event) {
-        event.preventDefault();
-        setDraggedTo(false);
+        if(!store.isItemEditActive){
+            event.preventDefault();
+            setDraggedTo(false);
+        }
     }
 
     function handleDrop(event) {
-        event.preventDefault();
-        let target = event.target;
-        let targetId = target.id;
-        targetId = targetId.substring(target.id.indexOf("-") + 1);
-        let sourceId = event.dataTransfer.getData("item");
-        sourceId = sourceId.substring(sourceId.indexOf("-") + 1);
-        setDraggedTo(false);
+        if(!store.isItemEditActive){
+            event.preventDefault();
+            let target = event.target;
+            let targetId = target.id;
+            targetId = targetId.substring(target.id.indexOf("-") + 1);
+            let sourceId = event.dataTransfer.getData("item");
+            sourceId = sourceId.substring(sourceId.indexOf("-") + 1);
+            setDraggedTo(false);
 
-        // UPDATE THE LIST
-        store.addMoveItemTransaction(sourceId, targetId);
+            // UPDATE THE LIST
+            store.addMoveItemTransaction(sourceId, targetId);
+        }
     }
 
     function handleEditItem(event){
-        //event.preventDefault();
-        //event.stopPropagation();
-        let idd = event.target.id.charAt(10);
-        setText(store.currentList.items[idd]);
-        store.setIsItemEditActive();
-        toggleItemEdit();
-        let id = event.target.id;
-        //console.log(event.target.id); this gives you "edit-item-01, 11, 21, 32, 41"
+        if(!store.isItemEditActive){
+            document.getElementById("undo-button").style.opacity = 0.2;
+            document.getElementById("close-button").style.opacity = 0.2;
+            document.getElementById("redo-button").style.opacity = 0.2;
+            //event.preventDefault();
+            //event.stopPropagation();
+            let idd = event.target.id.charAt(10);
+            setText(store.currentList.items[idd]);
+            store.setIsItemEditActive();
+            toggleItemEdit();
+            let id = event.target.id;
+            //console.log(event.target.id); this gives you "edit-item-01, 11, 21, 32, 41"
+        }
     }
 
     function toggleItemEdit() {

@@ -190,16 +190,18 @@ export const useGlobalStore = () => {
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
     store.closeCurrentList = function () {
-        storeReducer({
-            type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
-            payload: {}
-        });
+        if(!store.isItemEditActive){
+            storeReducer({
+                type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
+                payload: {}
+            });
         
 
-        document.getElementById("close-button").style.opacity = 0.2;
-        document.getElementById("redo-button").style.opacity = 0.2
-        document.getElementById("undo-button").style.opacity = 0.2
-        tps.clearAllTransactions();
+            document.getElementById("close-button").style.opacity = 0.2;
+            document.getElementById("redo-button").style.opacity = 0.2
+            document.getElementById("undo-button").style.opacity = 0.2
+            tps.clearAllTransactions();
+        }
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -370,21 +372,25 @@ export const useGlobalStore = () => {
         asyncUpdateCurrentList();
     }
     store.undo = function () {
-        if(tps.hasTransactionToUndo()){
-            tps.undoTransaction();
-            document.getElementById("redo-button").style.opacity = "1.0";
-            if(!tps.hasTransactionToUndo()){
-                document.getElementById("undo-button").style.opacity = "0.2";
+        if(!store.isItemEditActive){
+            if(tps.hasTransactionToUndo()){
+                tps.undoTransaction();
+                document.getElementById("redo-button").style.opacity = "1.0";
+                if(!tps.hasTransactionToUndo()){
+                    document.getElementById("undo-button").style.opacity = "0.2";
+                }
             }
         }
     }
     store.redo = function () {
-        tps.doTransaction();
-        if(!tps.hasTransactionToRedo()){
-            document.getElementById("redo-button").style.opacity = "0.2";
-        }
-        else{
-            document.getElementById("redo-button").style.opacity = "1.0";
+        if(!store.isItemEditActive){
+            tps.doTransaction();
+            if(!tps.hasTransactionToRedo()){
+                document.getElementById("redo-button").style.opacity = "0.2";
+            }
+            else{
+                document.getElementById("redo-button").style.opacity = "1.0";
+            }
         }
     }
 
