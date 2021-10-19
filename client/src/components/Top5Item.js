@@ -46,6 +46,8 @@ function Top5Item(props) {
     function handleEditItem(event){
         //event.preventDefault();
         //event.stopPropagation();
+        let idd = event.target.id.charAt(10);
+        setText(store.currentList.items[idd]);
         toggleItemEdit();
         let id = event.target.id;
         //console.log(event.target.id); this gives you "edit-item-01, 11, 21, 32, 41"
@@ -100,7 +102,7 @@ function Top5Item(props) {
                 id={"edit-item-" + index + 1}
                 className={itemClass}
                 type='text'
-                //defaultValue={}
+                defaultValue={text}
                 onKeyPress={handleKeyPress}
                 onChange={handleUpdateText}
             /> 
