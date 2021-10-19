@@ -17,7 +17,8 @@ export const GlobalStoreActionType = {
     CLOSE_CURRENT_LIST: "CLOSE_CURRENT_LIST",
     LOAD_ID_NAME_PAIRS: "LOAD_ID_NAME_PAIRS",
     SET_CURRENT_LIST: "SET_CURRENT_LIST",
-    SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE"
+    SET_LIST_NAME_EDIT_ACTIVE: "SET_LIST_NAME_EDIT_ACTIVE",
+    //CREATE_NEW_LIST: "CREATE_NEW_LIST"
 }
 
 // WE'LL NEED THIS TO PROCESS TRANSACTIONS
@@ -96,6 +97,17 @@ export const useGlobalStore = () => {
                     listMarkedForDeletion: null
                 });
             }
+            //CREATE A NEW LIST 
+            //case GlobalStoreActionType.CREATE_NEW_LIST: {
+            //    return setStore({
+            //        idNamePairs: store.idNamePairs,
+            //        currentList: payload,
+            //        newListCounter: store.newListCounter,
+            //        isListNameEditActive: false,
+            //        isItemEditActive: false,
+            //        listMarkedForDeletion: null
+            //    });
+            //}
             default:
                 return store;
         }
@@ -185,6 +197,26 @@ export const useGlobalStore = () => {
         }
         asyncSetCurrentList(id);
     }
+
+    store.createNewList = function (id) {
+        async function asyncCreateNewList() {
+            let response = await api.createTop5List(
+                {name: "Untitled", items: ['?','?','?','?','?']}
+            );
+            if (response.data.success){
+                let top5List = response.data.top5List;
+                console.log(top5List);
+                storeReducer({
+                    type: GlobalStoreActionType.SET_CURRENT_LIST,
+                    payload: top5List
+                });
+                store.history.push("/top5list/" + top5List._id);
+            }
+        }
+        asyncCreateNewList();
+    }
+
+
     store.addMoveItemTransaction = function (start, end) {
         let transaction = new MoveItem_Transaction(store, start, end);
         tps.addTransaction(transaction);

@@ -26,6 +26,17 @@ const ListSelector = () => {
             />
         ))
     }
+
+    //this function should add a list but idk how to do that quite yet 
+    function handleCreateList(event){
+        if(!event.target.disabled){
+            let d = new Date();
+            let id = d.getTime();
+
+            store.createNewList(id);
+        }
+    }
+
     return (
         <div id="top5-list-selector">
             <div id="list-selector-heading">
@@ -33,7 +44,8 @@ const ListSelector = () => {
                     type="button"
                     id="add-list-button"
                     className="top5-button"
-                    value="+" />
+                    value="+" 
+                    onClick={handleCreateList}/>
                 Your Lists
             </div>
             <div id="list-selector-list">
