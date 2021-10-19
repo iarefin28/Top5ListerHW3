@@ -48,6 +48,7 @@ function Top5Item(props) {
         //event.stopPropagation();
         let idd = event.target.id.charAt(10);
         setText(store.currentList.items[idd]);
+        store.setIsItemEditActive();
         toggleItemEdit();
         let id = event.target.id;
         //console.log(event.target.id); this gives you "edit-item-01, 11, 21, 32, 41"

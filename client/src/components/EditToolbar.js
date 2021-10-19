@@ -19,8 +19,10 @@ function EditToolbar() {
         store.redo();
     }
     function handleClose() {
-        history.push("/");
-        store.closeCurrentList();
+        if(!store.isItemEditActive){
+            history.push("/");
+            store.closeCurrentList();
+        }
     }
     let editStatus = false;
     if (store.isListNameEditActive) {

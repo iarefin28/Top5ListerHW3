@@ -136,6 +136,16 @@ export const useGlobalStore = () => {
                     listMarkedForDeletion: null
                 });
             }
+            case GlobalStoreActionType.ITEM_EDIT_ACTIVE: {
+                return setStore({
+                    idNamePairs: store.idNamePairs,
+                    currentList: store.currentList,
+                    newListCounter: store.newListCounter,
+                    isListNameEditActive: false,
+                    isItemEditActive: true,
+                    listMarkedForDeletion: null
+                });
+            }
             default:
                 return store;
         }
@@ -175,6 +185,7 @@ export const useGlobalStore = () => {
             }
         }
         asyncChangeListName(id);
+        document.getElementById("add-list-button").style.opacity = 1.0;
     }
 
     // THIS FUNCTION PROCESSES CLOSING THE CURRENTLY LOADED LIST
@@ -183,6 +194,7 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
+        
 
         document.getElementById("close-button").style.opacity = 0.2;
         document.getElementById("redo-button").style.opacity = 0.2
@@ -246,9 +258,13 @@ export const useGlobalStore = () => {
                     payload: top5List
                 });
                 store.history.push("/top5list/" + top5List._id);
+                document.getElementById("close-button").style.opacity = 1.0;
             }
         }
-        asyncCreateNewList();
+        if(!store.isListNameEditActive){
+            asyncCreateNewList();
+        }
+        //asyncCreateNewList();
     }
 
     store.deleteMarkedList = function() {
@@ -332,9 +348,13 @@ export const useGlobalStore = () => {
     }
 
     store.changeItemName = function (id, newName){
+        let oldname = store.currentList.items[id];
         store.currentList.items[id] = newName;
         store.updateCurrentList();
-        document.getElementById("undo-button").style.opacity = 1.0;
+        if(!(oldname === newName)){
+            document.getElementById("undo-button").style.opacity = 1.0;
+        }
+        document.getElementById("close-button").style.opacity = 1.0;
     }
 
     store.updateCurrentList = function() {
@@ -370,8 +390,16 @@ export const useGlobalStore = () => {
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
     store.setIsListNameEditActive = function () {
+        document.getElementById("add-list-button").style.opacity = 0.2;
         storeReducer({
             type: GlobalStoreActionType.SET_LIST_NAME_EDIT_ACTIVE,
+            payload: null
+        });
+    }
+    store.setIsItemEditActive = function () {
+        document.getElementById("close-button").style.opacity = 0.2;
+        storeReducer({
+            type: GlobalStoreActionType.ITEM_EDIT_ACTIVE,
             payload: null
         });
     }
