@@ -79,15 +79,15 @@ console.log("updateTop5List: " + JSON.stringify(body));
 }
 deleteTop5List = async (req, res) => {
     await Top5List.findOneAndDelete({ _id: req.params.id }, (err, top5List) => {
-        if (err) {
-            return res.status(400).json({ success: false, error: err })
-        }
+        //if (err) {
+        //    return res.status(400).json({ success: false, error: err })
+        //}
 
-        if (!top5List) {
-            return res
-                .status(404)
-                .json({ success: false, error: `Top 5 List not found` })
-        }
+        //if (!top5List) {
+        //    return res
+        //        .status(404)
+        //        .json({ success: false, error: `Top 5 List not found` })
+        //}
 
         return res.status(200).json({ success: true, data: top5List })
     }).catch(err => console.log(err))

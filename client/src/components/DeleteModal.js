@@ -20,6 +20,8 @@ function DeleteModal() {
     }
     function handleDeleteList(event) {
         store.deleteMarkedList();
+        //handleCloseModal();
+        //store.loadIdNamePairs();
     }
     function handleCloseModal(event) {
         store.hideDeleteListModal();
