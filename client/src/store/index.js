@@ -314,6 +314,12 @@ export const useGlobalStore = () => {
         // NOW MAKE IT OFFICIAL
         store.updateCurrentList();
     }
+
+    store.changeItemName = function (id, newName){
+        store.currentList.items[id] = newName;
+        store.updateCurrentList();
+    }
+
     store.updateCurrentList = function() {
         async function asyncUpdateCurrentList() {
             const response = await api.updateTop5ListById(store.currentList._id, store.currentList);
