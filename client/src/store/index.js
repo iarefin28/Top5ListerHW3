@@ -183,6 +183,11 @@ export const useGlobalStore = () => {
             type: GlobalStoreActionType.CLOSE_CURRENT_LIST,
             payload: {}
         });
+
+        document.getElementById("close-button").style.opacity = 0.2;
+        document.getElementById("redo-button").style.opacity = 0.2
+        document.getElementById("undo-button").style.opacity = 0.2
+        tps.clearAllTransactions();
     }
 
     // THIS FUNCTION LOADS ALL THE ID, NAME PAIRS SO WE CAN LIST ALL THE LISTS
@@ -224,6 +229,7 @@ export const useGlobalStore = () => {
             }
         }
         asyncSetCurrentList(id);
+        document.getElementById("close-button").style.opacity = 1.0;
     }
 
     store.createNewList = function (id) {
@@ -322,11 +328,13 @@ export const useGlobalStore = () => {
 
         // NOW MAKE IT OFFICIAL
         store.updateCurrentList();
+        document.getElementById("undo-button").style.opacity = 1.0;
     }
 
     store.changeItemName = function (id, newName){
         store.currentList.items[id] = newName;
         store.updateCurrentList();
+        document.getElementById("undo-button").style.opacity = 1.0;
     }
 
     store.updateCurrentList = function() {
@@ -342,10 +350,22 @@ export const useGlobalStore = () => {
         asyncUpdateCurrentList();
     }
     store.undo = function () {
-        tps.undoTransaction();
+        if(tps.hasTransactionToUndo()){
+            tps.undoTransaction();
+            document.getElementById("redo-button").style.opacity = "1.0";
+            if(!tps.hasTransactionToUndo()){
+                document.getElementById("undo-button").style.opacity = "0.2";
+            }
+        }
     }
     store.redo = function () {
         tps.doTransaction();
+        if(!tps.hasTransactionToRedo()){
+            document.getElementById("redo-button").style.opacity = "0.2";
+        }
+        else{
+            document.getElementById("redo-button").style.opacity = "1.0";
+        }
     }
 
     // THIS FUNCTION ENABLES THE PROCESS OF EDITING A LIST NAME
