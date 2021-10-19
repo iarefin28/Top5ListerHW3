@@ -61,7 +61,8 @@ function Top5Item(props) {
     function handleKeyPress(event){
         if(event.code === "Enter"){
             let index = event.target.id.charAt(10); //gives you the item number we are working on 
-            store.changeItemName(index, text);
+            //store.changeItemName(index, text);
+            store.addChangeItemTransaction(index, text);
             toggleItemEdit();
         }
     }
