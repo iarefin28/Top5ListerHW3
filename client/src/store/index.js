@@ -185,6 +185,7 @@ export const useGlobalStore = () => {
             }
         }
         asyncChangeListName(id);
+        store.closeCurrentList();
         document.getElementById("add-list-button").style.opacity = 1.0;
     }
 
@@ -264,6 +265,7 @@ export const useGlobalStore = () => {
             }
         }
         if(!store.isListNameEditActive){
+            console.log(store.isListNameEditActive)
             asyncCreateNewList();
         }
         //asyncCreateNewList();
@@ -357,6 +359,12 @@ export const useGlobalStore = () => {
             document.getElementById("undo-button").style.opacity = 1.0;
         }
         document.getElementById("close-button").style.opacity = 1.0;
+        if(tps.hasTransactionToUndo()){
+            document.getElementById("undo-button").style.opacity = 1.0;
+        }
+        if(tps.hasTransactionToRedo()){
+            document.getElementById("redo-button").style.opacity = 1.0;
+        }
     }
 
     store.updateCurrentList = function() {
